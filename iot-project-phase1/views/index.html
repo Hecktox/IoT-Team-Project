@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IoT Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>IoT Dashboard</h1>
+        <p class="description">Made by Maximus, Ariel, and Philippe</p>
+        <div class="status">
+            <p>Switch Status: <span id="switchStatus">OFF</span></p>
+            <img id="ledIcon" src="{{ url_for('static', filename='images/led_off.png') }}" alt="LED Icon">
+        </div>
+        <button id="switchButton">Toggle Switch</button>
+        <button id="holdSwitch">Hold Switch</button>
+        <button id="flashingToggleSwitch">Flashing Toggle Switch</button>
+    </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
