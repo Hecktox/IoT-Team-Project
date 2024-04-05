@@ -130,6 +130,12 @@ threading.Thread(target=background_loop).start()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+    print('Program is starting ... ')
+    try:
+        loop()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+        exit()
     
 
 
