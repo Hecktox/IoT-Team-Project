@@ -9,6 +9,10 @@ import Freenove_DHT as DHT
 import smtplib
 import imaplib
 import email
+import threading
+from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__, template_folder='views')
 
 GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
@@ -25,8 +29,8 @@ SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
 
 # Write email and app password here
-EMAIL_ADDRESS = 'email'
-EMAIL_PASSWORD = 'app password'
+EMAIL_ADDRESS = 'brobruh021@gmail.com'
+EMAIL_PASSWORD = 'qynv phuq gtrj zysj'
 
 IMAP_SERVER = 'imap.gmail.com'
 IMAP_PORT = 993
@@ -102,12 +106,35 @@ def loop():
         
         time.sleep(2)
 
-if __name__ == '__main__':
-    print('Program is starting ... ')
+@app.route('/temp_humidity')
+def temp_humidity():
+    dht = DHT.DHT(DHTPin)
+    if dht.readDHT11() == dht.DHTLIB_OK:
+        return jsonify(temperature=dht.temperature, humidity=dht.humidity)
+    else:
+        return jsonify(error="Failed to read from the sensor"), 500
+
+@app.route('/fan_status')
+def fan_status():
+    is_on = GPIO.input(Motor1)
+    status = "ON" if is_on else "OFF"
+    return jsonify(fan_status=status)
+
+def background_loop():
     try:
         loop()
     except KeyboardInterrupt:
         GPIO.cleanup()
-        exit()
+
+threading.Thread(target=background_loop).start()
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
+    
+
+
+
+
+
 
 
